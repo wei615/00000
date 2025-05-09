@@ -4,9 +4,9 @@
 let video;
 let handPose;
 let hands = [];
-let rectX = 270; // Initial X position of the rectangle
-let rectY = 190; // Initial Y position of the rectangle
-const rectSize = 100; // Width and height of the rectangle
+let circleX = 320; // Initial X position of the circle
+let circleY = 240; // Initial Y position of the circle
+const circleRadius = 50; // Radius of the circle
 
 function preload() {
   // Initialize HandPose model with flipped video input
@@ -33,10 +33,10 @@ function setup() {
 function draw() {
   image(video, 0, 0);
 
-  // Draw the rectangle
+  // Draw the circle
   fill(0, 255, 0, 150); // Semi-transparent green
   noStroke();
-  rect(rectX, rectY, rectSize, rectSize);
+  ellipse(circleX, circleY, circleRadius * 2);
 
   // Ensure at least one hand is detected
   if (hands.length > 0) {
@@ -57,71 +57,20 @@ function draw() {
           circle(keypoint.x, keypoint.y, 16);
         }
 
-        // Draw lines connecting keypoints
-        stroke(255);
-        strokeWeight(2);
-
-        // Connect keypoints 0 to 4
-        for (let i = 0; i < 4; i++) {
-          line(
-            hand.keypoints[i].x,
-            hand.keypoints[i].y,
-            hand.keypoints[i + 1].x,
-            hand.keypoints[i + 1].y
-          );
-        }
-
-        // Connect keypoints 5 to 8
-        for (let i = 5; i < 8; i++) {
-          line(
-            hand.keypoints[i].x,
-            hand.keypoints[i].y,
-            hand.keypoints[i + 1].x,
-            hand.keypoints[i + 1].y
-          );
-        }
-
-        // Connect keypoints 9 to 12
-        for (let i = 9; i < 12; i++) {
-          line(
-            hand.keypoints[i].x,
-            hand.keypoints[i].y,
-            hand.keypoints[i + 1].x,
-            hand.keypoints[i + 1].y
-          );
-        }
-
-        // Connect keypoints 13 to 16
-        for (let i = 13; i < 16; i++) {
-          line(
-            hand.keypoints[i].x,
-            hand.keypoints[i].y,
-            hand.keypoints[i + 1].x,
-            hand.keypoints[i + 1].y
-          );
-        }
-
-        // Connect keypoints 17 to 20
-        for (let i = 17; i < 20; i++) {
-          line(
-            hand.keypoints[i].x,
-            hand.keypoints[i].y,
-            hand.keypoints[i + 1].x,
-            hand.keypoints[i + 1].y
-          );
-        }
-
-        // Check if the index finger (keypoint 8) is touching the rectangle
+        // Check if both the index finger (keypoint 8) and thumb (keypoint 4) are touching the circle
         let indexFinger = hand.keypoints[8];
+        let thumb = hand.keypoints[4];
+
+        let indexDistance = dist(indexFinger.x, indexFinger.y, circleX, circleY);
+        let thumbDistance = dist(thumb.x, thumb.y, circleX, circleY);
+
         if (
-          indexFinger.x > rectX &&
-          indexFinger.x < rectX + rectSize &&
-          indexFinger.y > rectY &&
-          indexFinger.y < rectY + rectSize
+          indexDistance <= circleRadius &&
+          thumbDistance <= circleRadius
         ) {
-          // Move the rectangle to follow the index finger
-          rectX = indexFinger.x - rectSize / 2;
-          rectY = indexFinger.y - rectSize / 2;
+          // Move the circle to follow the midpoint between the index finger and thumb
+          circleX = (indexFinger.x + thumb.x) / 2;
+          circleY = (indexFinger.y + thumb.y) / 2;
         }
       }
     }
