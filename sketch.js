@@ -40,13 +40,67 @@ function draw() {
 
           // Color-code based on left or right hand
           if (hand.handedness == "Left") {
-            fill(255, 0, 255);
+            fill("#ff006e");
           } else {
-            fill(255, 255, 0);
+            fill("#8338ec");
           }
 
           noStroke();
           circle(keypoint.x, keypoint.y, 16);
+        }
+
+        // Draw lines connecting keypoints
+        stroke(255);
+        strokeWeight(2);
+
+        // Connect keypoints 0 to 4
+        for (let i = 0; i < 4; i++) {
+          line(
+            hand.keypoints[i].x,
+            hand.keypoints[i].y,
+            hand.keypoints[i + 1].x,
+            hand.keypoints[i + 1].y
+          );
+        }
+
+        // Connect keypoints 5 to 8
+        for (let i = 5; i < 8; i++) {
+          line(
+            hand.keypoints[i].x,
+            hand.keypoints[i].y,
+            hand.keypoints[i + 1].x,
+            hand.keypoints[i + 1].y
+          );
+        }
+
+        // Connect keypoints 9 to 12
+        for (let i = 9; i < 12; i++) {
+          line(
+            hand.keypoints[i].x,
+            hand.keypoints[i].y,
+            hand.keypoints[i + 1].x,
+            hand.keypoints[i + 1].y
+          );
+        }
+
+        // Connect keypoints 13 to 16
+        for (let i = 13; i < 16; i++) {
+          line(
+            hand.keypoints[i].x,
+            hand.keypoints[i].y,
+            hand.keypoints[i + 1].x,
+            hand.keypoints[i + 1].y
+          );
+        }
+
+        // Connect keypoints 17 to 20
+        for (let i = 17; i < 20; i++) {
+          line(
+            hand.keypoints[i].x,
+            hand.keypoints[i].y,
+            hand.keypoints[i + 1].x,
+            hand.keypoints[i + 1].y
+          );
         }
       }
     }
