@@ -4,6 +4,9 @@
 let video;
 let handPose;
 let hands = [];
+let rectX = 270; // Initial X position of the rectangle
+let rectY = 190; // Initial Y position of the rectangle
+const rectSize = 100; // Width and height of the rectangle
 
 function preload() {
   // Initialize HandPose model with flipped video input
@@ -29,6 +32,11 @@ function setup() {
 
 function draw() {
   image(video, 0, 0);
+
+  // Draw the rectangle
+  fill(0, 255, 0, 150); // Semi-transparent green
+  noStroke();
+  rect(rectX, rectY, rectSize, rectSize);
 
   // Ensure at least one hand is detected
   if (hands.length > 0) {
@@ -101,6 +109,19 @@ function draw() {
             hand.keypoints[i + 1].x,
             hand.keypoints[i + 1].y
           );
+        }
+
+        // Check if the index finger (keypoint 8) is touching the rectangle
+        let indexFinger = hand.keypoints[8];
+        if (
+          indexFinger.x > rectX &&
+          indexFinger.x < rectX + rectSize &&
+          indexFinger.y > rectY &&
+          indexFinger.y < rectY + rectSize
+        ) {
+          // Move the rectangle to follow the index finger
+          rectX = indexFinger.x - rectSize / 2;
+          rectY = indexFinger.y - rectSize / 2;
         }
       }
     }
